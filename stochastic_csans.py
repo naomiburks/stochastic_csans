@@ -9,9 +9,6 @@ class State:
         self.EDTs = EDTs
         self.ETs = ETs
 
-    def __repr__(self):
-        return f"D: {self.D}. Es: {self.Es}. Ts: {self.Ts}. EDTs: {self.EDTs}. ETs: {self.ETs}"
-
     def verify_coherence(self):
         if self.D < 0:
             return False
@@ -76,6 +73,37 @@ class State:
         if total_bound_D == 0:
             return total_bound_D
         return total_bound_D / total_T
+
+    def __repr__(self):
+        return f"D: {self.D}. Es: {self.Es}. Ts: {self.Ts}. EDTs: {self.EDTs}. ETs: {self.ETs}"
+
+    def __add__(self, other):
+        return State(
+            self.D + other.D, 
+            [e1 + e2 for e1, e2 in zip(self.Es, other.Es)], 
+            [t1 + t2 for t1, t2 in zip(self.Ts, other.Ts)],
+            [[edt1 + edts for edt1, edt2 in zip(l1, l2)] for l1, l2 in zip(self.EDTs, other.EDTs)],
+            [[et1 + ets for et1, et2 in zip(l1, l2)] for l1, l2 in zip(self.ETs, other.ETs)]
+            )
+    
+    def __sub__(self, other):
+        return State(
+            self.D - other.D, 
+            [e1 - e2 for e1, e2 in zip(self.Es, other.Es)], 
+            [t1 - t2 for t1, t2 in zip(self.Ts, other.Ts)],
+            [[edt1 - edts for edt1, edt2 in zip(l1, l2)] for l1, l2 in zip(self.EDTs, other.EDTs)],
+            [[et1 - ets for et1, et2 in zip(l1, l2)] for l1, l2 in zip(self.ETs, other.ETs)],
+            )
+
+    def __mul__(self, other):
+        return State(
+            self.D * other, 
+            [e1 * other for e1 in self.Es], 
+            [t1 * other for t1 in self.Ts],
+            [[edt1 * other for edt1 in l1] for l1 in self.EDTs],
+            [[et1 * other for et1 in l1] for l1 in self.ETs]
+            )
+    
 
 
 class CSANModel(EventModel):
