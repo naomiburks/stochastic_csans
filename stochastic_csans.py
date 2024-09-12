@@ -74,6 +74,41 @@ class State:
             return total_bound_D
         return total_bound_D / total_T
 
+    def export_to_list(self):
+        l = [self.D]
+        for e in self.Es:
+            l.append(e)
+        for t in self.Ts:
+            l.append(t)
+        for l1 in self.EDTs:
+            for edt in l1:
+                l.append(edt)
+        for l1 in self.ETs:
+            for et in l1:
+                l.append(et)
+        return l
+
+    @staticmethod
+    def import_from_list(l, e_receptors, t_receptors):
+        Ds_end = 1
+        D = l[0]
+        Es_end = Ds_end + e_receptors + 1
+        Es = l[Ds_end: Es_end]
+        Ts_end = Es_end + t_receptors + 1
+        Ts = l[Es_end:Ts_end]
+        EDTs = []
+        for i in range(e_receptors):
+            start = Ts_end + i * t_receptors
+            end = Ts_end + (i + 1) * t_receptors
+            EDTs.append(l[start:end])
+        ETs = []
+        for i in range(e_receptors):
+            start = Ts_end + i * t_receptors + t_receptors * e_receptors
+            end = Ts_end + (i + 1) * t_receptors + t_receptors * e_receptors
+            ETs.append(l[start:end])
+        return State(D, Es, Ts, EDTs, ETs)
+        
+
     def __repr__(self):
         return f"D: {self.D}. Es: {self.Es}. Ts: {self.Ts}. EDTs: {self.EDTs}. ETs: {self.ETs}"
 

@@ -4,7 +4,7 @@ from abc import abstractmethod
 
 import numpy as np
 from scipy.linalg import solve
-from src.tools.models.model import Model
+from model import Model
 
 class Event:
     """
@@ -122,6 +122,9 @@ class EventModel(Model):
         if verbose:
             print(current_state)
         return current_state
+
+    
+
 
 class ConstantEventModel(EventModel):
     def __init__(self, events: list[ConstantEvent]):
