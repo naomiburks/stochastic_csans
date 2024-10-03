@@ -32,7 +32,7 @@ class State:
         return sum(self.Es)
     
     def T(self):
-        return sum(self.Es)
+        return sum(self.Ts)
     
     def EDT(self):
         return sum([sum(row) for row in self.EDTs])
@@ -138,8 +138,6 @@ class State:
             [[edt1 * other for edt1 in l1] for l1 in self.EDTs],
             [[et1 * other for et1 in l1] for l1 in self.ETs]
             )
-    
-
 
 class CSANModel(EventModel):
     def __init__(self, e_receptors, t_receptors):
@@ -266,7 +264,6 @@ class TumorInternalization(TIE):
         state.Ts[self.bound_CSAN_count - 1] = state.Ts[self.bound_CSAN_count - 1] + 1
         return state
 
-
 class ED_TFormation(TIE):
     def __init__(self, TCell_bound_count, tumor_bound_count, TCell_receptors, tumor_receptors):
         self.TCell_bound_count = TCell_bound_count
@@ -352,7 +349,6 @@ class E_TFormation(TIE):
         state.Es[self.TCell_bound_count] = state.Es[self.TCell_bound_count] - 1
         state.Ts[self.tumor_bound_count] = state.Ts[self.tumor_bound_count] - 1
         state.ETs[self.TCell_bound_count][self.tumor_bound_count] = state.ETs[self.TCell_bound_count][self.tumor_bound_count] + 1
-
 
 class TrimerDeath(TIE):
     def __init__(self, TCell_bound_count, tumor_bound_count, TCell_receptors, tumor_receptors):
