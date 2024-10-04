@@ -72,3 +72,22 @@ SIMPLE_D41_PARAMETERS = {
     "d_EDT": 1,
     "d_ET": 1,
 }
+
+
+NO_TRIMER_PARAMS = {
+    "b_E": 0,
+    "b_T": 0.029,
+    "d_E": 0.029, 
+    "d_T": 0, 
+    "lambda_E": 0, 
+    "lambda_T": 0.1, 
+    "mu_E": 0,
+    "mu_T": 0,
+    "lambda_ET": 0,
+    "p_E|T": 0,
+    "p_E|DT": 0,
+    "p_ED|T": 0,
+    "M": 0,
+    "d_EDT": 0,
+    "d_ET": 0,
+}
