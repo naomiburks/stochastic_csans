@@ -70,8 +70,14 @@ class CSANDetModel(Model):
             for j in range(self.t_receptors):
                 index = self._get_et_index(i, j)
                 e_change += state[index] * parameters["d_ET"]
+                if j == 0:
+                    continue
+                index = self._get_edt_index(i, j - 1)
+                e_change += state[index] * parameters["d_ET"]
 
             # incoming csan bindings
+            
+
 
             # outgoing csan bindings
 
