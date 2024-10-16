@@ -12,6 +12,12 @@ class CSANDetModel(Model):
         self.t_receptors = t_receptors
         self.dimension = 3 + e_receptors + t_receptors + 2 * e_receptors * t_receptors
 
+    def run(self, parameters, initial_state, timepoints):
+        f = lambda state, t: self.derivative(state, parameters)
+        result = odeint(f, initial_state, timepoints)
+        return result
+
+
     def _get_d_index(self):
         return 0
     
@@ -51,12 +57,12 @@ class CSANDetModel(Model):
         # bindings to effectors
         for i in range(self.e_receptors + 1):
             index = self._get_e_index(i)
-            csans_change -= parameters["lambda_E"] * state[index] * (self.e_receptors - i)
+            csans_change -= parameters["lambda_E"] * state[index] * (self.e_receptors - i) * state[self._get_d_index()]
         
         # bindings to tumors
         for i in range(self.t_receptors + 1):
             index = self._get_t_index(i)
-            csans_change -= parameters["lambda_T"] * state[index] * (self.t_receptors - i)
+            csans_change -= parameters["lambda_T"] * state[index] * (self.t_receptors - i) * state[self._get_d_index()]
         
         # tumor cells dying
         for i, j in product(range(self.e_receptors), range(self.t_receptors)):
@@ -65,6 +71,11 @@ class CSANDetModel(Model):
             index = self._get_edt_index(i, j)
             csans_change += parameters["d_EDT"] * state[index] * j
         
+        # effector cells dying
+        for i in range(self.e_receptors + 1):
+            index = self._get_e_index(i)
+            csans_change += parameters["d_E"] * state[index] * i
+
         derivative[0] = csans_change
 
 
@@ -75,17 +86,19 @@ class CSANDetModel(Model):
             # incoming births
             for j in range(self.e_receptors + 1):
                 index = self._get_e_index(j)
-                e_change += parameters["b_E"] * binom(j, i) / (2 ** j) * state[index]
-            index = self._get_e_index(i)
+                e_change += 2 * parameters["b_E"] * binom(j, i) / (2 ** j) * state[index]
             
             # outgoing births
+            index = self._get_e_index(i)
             e_change -= parameters["b_E"] * state[index]
             
             # deaths
             e_change -= parameters["d_E"] * state[index]
 
-            # incoming dimer/trimer kills
+            # incoming dimer kills
             for j in range(self.t_receptors):
+                if i == self.e_receptors:
+                    continue
                 index = self._get_et_index(i, j)
                 e_change += state[index] * parameters["d_ET"]
                 if i == 0:
@@ -118,19 +131,52 @@ class CSANDetModel(Model):
 
         # get Ts derivatives
         for i in range(self.t_receptors + 1):
-            # births
+            t_change = 0
+
+            # incoming births
+            for j in range(self.t_receptors + 1):
+                index = self._get_t_index(j)
+                t_change += 2 * parameters["b_T"] * binom(j, i) / (2 ** j) * state[index]
+            
+            # outgoing births
+            index = self._get_t_index(i)
+            t_change -= parameters["b_T"] * state[index]
+
             # deaths
-            # csan bindings
-            # absorbtions
+            t_change -= parameters["d_T"] * state[index]
+
+            # incoming csan bindings
+            if i != 0:
+                index = self._get_t_index(i - 1)
+                t_change += state[index] * parameters["lambda_T"] * (self.t_receptors - i + 1) * state[self._get_d_index()]
+
+            # outgoing csan bindings
+            if i != self.t_receptors:
+                index = self._get_t_index(i)
+                t_change -= state[index] * parameters["lambda_T"] * (self.t_receptors - i) * state[self._get_d_index()]
+
+            # incoming csan absorbtions
+            pass
+
+            # outgoing csan absorbtions
+            pass
+
             # dimer/trimer formation
             pass
-        
+
+            index = self._get_t_index(i)
+            derivative[index] = t_change
+
         # get ETs derivatives
         for i, j in product(range(self.e_receptors), range(self.t_receptors)):
+            # ET formation
+            pass
+            # ET killing
             pass
 
         # get EDTs derivatives 
         for i, j in product(range(self.e_receptors), range(self.t_receptors)):
+            # EDT formation
             pass
 
         return derivative
