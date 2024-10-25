@@ -122,8 +122,19 @@ class CSANDetModel(Model):
             # outgoing csan absorbtions
             pass
             # dimer/trimer formation
-            pass
-            
+            for j in range(self.t_receptors + 1):
+                t_index = self._get_t_index(j)
+                e_index = self._get_e_index(i)
+                
+                e_bound_pro = i / self.e_receptors
+                t_bound_pro = j / self.t_receptors
+                success_prob = (1 - e_bound_pro) * (1 - t_bound_pro) * parameters["p_E|T"] + \
+                    (e_bound_pro) * (1 - t_bound_pro) * parameters["p_ED|T"] + \
+                    (1 - e_bound_pro) * (t_bound_pro) * parameters["p_E|DT"]
+                total_prob = 1 - (1 - success_prob) ** parameters["M"]
+                
+                e_change += state[t_index] * state[e_index] * parameters["lambda_ET"] * total_prob 
+
             # put change in derivative
             index = self._get_e_index(i)
             derivative[index] = e_change
@@ -158,11 +169,23 @@ class CSANDetModel(Model):
             # incoming csan absorbtions
             pass
 
+
             # outgoing csan absorbtions
             pass
 
             # dimer/trimer formation
-            pass
+            for j in range(self.e_receptors + 1):
+                t_index = self._get_t_index(i)
+                e_index = self._get_e_index(j)
+                
+                e_bound_pro = i / self.e_receptors
+                t_bound_pro = j / self.t_receptors
+                success_prob = (1 - e_bound_pro) * (1 - t_bound_pro) * parameters["p_E|T"] + \
+                    (e_bound_pro) * (1 - t_bound_pro) * parameters["p_ED|T"] + \
+                    (1 - e_bound_pro) * (t_bound_pro) * parameters["p_E|DT"]
+                total_prob = 1 - (1 - success_prob) ** parameters["M"]
+                
+                t_change += state[t_index] * state[e_index] * parameters["lambda_ET"] * total_prob 
 
             index = self._get_t_index(i)
             derivative[index] = t_change
