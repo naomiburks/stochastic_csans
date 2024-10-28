@@ -74,6 +74,27 @@ SIMPLE_D41_PARAMETERS = {
 }
 
 
+
+SIMPLE_D41_PARAMETERS_DEBUG = {
+    "b_E": 0,
+    "b_T": 0.00,
+    "d_E": 0.0, 
+    "d_T": 0, 
+    "lambda_E": 0.000, 
+    "lambda_T": 0.000, 
+    "mu_E": 0,
+    "mu_T": 0,
+    "lambda_ET": 0.01,
+    "p_E|T": .1,
+    "p_E|DT": .1,
+    "p_ED|T": .1,
+    "M": 10,
+    "d_EDT": 1,
+    "d_ET": 1,
+}
+
+
+
 NO_TRIMER_PARAMS = {
     "b_E": 0,
     "b_T": 0.029,
@@ -109,4 +130,25 @@ ZEROS = {
     "M": 0,
     "d_EDT": 0,
     "d_ET": 0,
+}
+
+
+
+
+EFFECTIVE_PARAMS = {
+    "b_E": 0,
+    "b_T": 0.03,
+    "d_E": 0.02, 
+    "d_T": 0, 
+    "lambda_E": 0.0000002, 
+    "lambda_T": 0.0000002, 
+    "mu_E": 0,
+    "mu_T": 0,
+    "lambda_ET": 0.000004,
+    "p_E|T": 0,
+    "p_E|DT": 1,
+    "p_ED|T": 1,
+    "M": 100,
+    "d_EDT": 1,
+    "d_ET": 1,
 }
