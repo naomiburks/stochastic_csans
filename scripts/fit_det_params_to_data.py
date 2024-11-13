@@ -1,4 +1,4 @@
-from deterministic_csans import CSANDetModel
+from scripts.deterministic_csans import CSANDetModel
 import matplotlib.pyplot as plt
 from copy import copy
 from constants import ZEROS, EFFECTIVE_PARAMS as PARAMS

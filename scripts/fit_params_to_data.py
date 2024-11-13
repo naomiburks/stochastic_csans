@@ -1,4 +1,4 @@
-from stochastic_csans import CSANModel
+from models.stochastic_csans import CSANModel
 from scipy import optimize
 from constants import SIMPLE_D41_PARAMETERS
 import csv

@@ -4,7 +4,7 @@ from abc import abstractmethod
 
 import numpy as np
 from scipy.linalg import solve
-from model import Model
+from models.model import Model
 
 class Event:
     """

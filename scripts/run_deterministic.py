@@ -1,4 +1,4 @@
-from deterministic_csans import CSANDetModel
+from scripts.deterministic_csans import CSANDetModel
 from constants import NO_TRIMER_PARAMS
 
 

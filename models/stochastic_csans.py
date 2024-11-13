@@ -1,4 +1,4 @@
-from event import TimeIndependentEvent as TIE, EventModel
+from models.event import TimeIndependentEvent as TIE, EventModel
 import numpy as np
 
 class State:

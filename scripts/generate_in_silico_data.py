@@ -1,6 +1,6 @@
 import numpy as np
 from scipy.integrate import odeint 
-from stochastic_csans import State, CSANModel
+from models.stochastic_csans import State, CSANModel
 from constants import BIG_TEST_PARAMETERS as params
 from plot import plot_all_aggregate_normalized
 import csv

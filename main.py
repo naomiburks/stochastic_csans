@@ -1,4 +1,4 @@
-from stochastic_csans import CSANModel
+from models.stochastic_csans import CSANModel
 from plot import make_average_free_csans_plot, make_average_TCell_plot, make_average_tumor_cell_plot, make_total_tumor_cell_plot, plot_all_aggregate_normalized
 import constants
 
@@ -31,6 +31,6 @@ plot_with_initial(0, 0)
 
 plot_with_initial(0, 100)
 
-for i in range(8):
+for i in range(4):
     plot_with_initial(4 ** i, 100)
     
